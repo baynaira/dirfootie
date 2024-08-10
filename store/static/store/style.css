@@ -1,0 +1,40 @@
+/* Fix the navbar at the top */
+.navbar {
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1030; /* Ensure it is above other elements */
+}
+
+/* Add padding to the top of the content to prevent overlap with the fixed navbar */
+body {
+    padding-top: 80px; /* Adjust based on the height of your navbar */
+}
+
+/* Center the logo on mobile and left-align on desktop */
+.navbar-brand {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+@media (min-width: 992px) {
+    .navbar-brand {
+        margin-left: 0;
+        margin-right: 0;
+    }
+}
+
+/* Ensure the cart icon is visible on all screen sizes */
+.nav-link {
+    display: flex;
+    align-items: center;
+}
+
+/* Cart icon alignment */
+.nav-link.d-lg-none {
+    margin-right: auto; /* Align to the left on mobile */
+}
+
+.nav-link.d-none.d-lg-block {
+    margin-left: auto; /* Align to the right on desktop */
+}

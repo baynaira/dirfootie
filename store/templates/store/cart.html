@@ -1,0 +1,47 @@
+{% extends 'store/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Your Cart</h1>
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Product</th>
+                <th>Quantity</th>
+                <th>Total Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cart_items %}
+            <tr>
+                <td>{{ item.product.name }}</td>
+                <td>
+                    <form method="POST" action="{% url 'store:update_cart_item' item.id %}">
+                        {% csrf_token %}
+                        <div class="input-group">
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-primary">Update</button>
+                            </div>
+                        </div>
+                    </form>
+                </td>
+                <td>${{ item.get_total_price }}</td>
+                <td>
+                    <a href="{% url 'store:remove_from_cart' item.id %}" class="btn btn-danger">Remove</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <p class="font-weight-bold">Total Price: ${{ total_price }}</p>
+
+    {% if cart_items %}
+        <a href="{% url 'store:checkout' %}" class="btn btn-success btn-lg mt-3">Proceed to Checkout</a>
+    {% else %}
+        <button type="button" class="btn btn-secondary btn-lg mt-3" disabled>No items in cart</button>
+    {% endif %}
+</div>
+{% endblock %}
