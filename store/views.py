@@ -3,6 +3,9 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from .forms import CheckoutForm
 from .order_models import Order, OrderItem
+from django.urls import reverse
+import urllib.parse
+
 
 def product_list(request):
     products = Product.objects.all()  # Fetch all products from the database
@@ -14,7 +17,7 @@ def product_detail(request, product_id):
     return render(request, 'store/product_details.html', {'product': product})
 
 
-@login_required
+@login_required(login_url='/login/')
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
     cart, created = Cart.objects.get_or_create(user=request.user)
@@ -76,19 +79,27 @@ def checkout_view(request):
     cart = Cart.objects.get(user=request.user)
     cart_items = CartItem.objects.filter(cart=cart)
     total_price = sum(item.get_total_price() for item in cart_items)
-    
-    
-     # Debugging line
 
     if request.method == 'POST':
-        # Handle payment processing here
+        # Construct message
+        whatsapp_number = '16575358034'
+        order_items = "\n".join([f"{item.product.name}: {item.quantity} x {item.product.price}" for item in cart_items])
+        message = f"Order Summary:\n{order_items}\nTotal: ${total_price}"
 
-        # Clear the cart (optional)
+        encoded_message = urllib.parse.quote(message)
+
+        # WhatsApp API URL
+        whatsapp_url = f"https://api.whatsapp.com/send?phone={whatsapp_number}&text={message}"
+
+        # Optionally, clear the cart
         cart_items.delete()
 
-        return render(request, 'store/order_success.html', {'total_price': total_price})
-
+        # Redirect user to WhatsApp and then show success page
+        return redirect(whatsapp_url)
+    
     return render(request, 'store/checkout.html', {
         'cart_items': cart_items,
         'total_price': total_price,
     })
+
+

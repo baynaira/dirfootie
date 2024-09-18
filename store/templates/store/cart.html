@@ -27,7 +27,7 @@
                         </div>
                     </form>
                 </td>
-                <td>${{ item.get_total_price }}</td>
+                <td>₦{{ item.get_total_price }}</td>
                 <td>
                     <a href="{% url 'store:remove_from_cart' item.id %}" class="btn btn-danger">Remove</a>
                 </td>
@@ -36,7 +36,7 @@
         </tbody>
     </table>
 
-    <p class="font-weight-bold">Total Price: ${{ total_price }}</p>
+    <p class="font-weight-bold">Total Price: ₦{{ total_price }}</p>
 
     {% if cart_items %}
         <a href="{% url 'store:checkout' %}" class="btn btn-success btn-lg mt-3">Proceed to Checkout</a>

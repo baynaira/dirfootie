@@ -8,3 +8,28 @@
     <p>Total Price: ${{ total_price }}</p>
 </div>
 {% endblock %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Success</title>
+</head>
+<body>
+    <div class="container mt-5">
+     <h2>Thank you for your order!</h2>
+     <p>Your total is: ${{ total_price }}</p>
+     <p>Order has been placed successfully.</p>
+     <p>We will process your order shortly. You can continue shopping <a href="{% url 'store:product_list' %}">here</a>.</p>
+    </div>
+
+    <script type="text/javascript">
+        // Redirect to WhatsApp after 2 seconds
+        setTimeout(function() {
+            window.location.href = "{{ whatsapp_url }}";
+        }, 2000);
+    </script>
+</body>
+</html>

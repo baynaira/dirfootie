@@ -4,31 +4,32 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Store</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <!-- Your Custom CSS -->
     {% load static %}
     <link rel="stylesheet" type="text/css" href="{% static 'store/style.css' %}">
 </head>
 <body>
-    
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container">
+            <div class="navbar-brand text-center w-100" style="font-size: 1.5rem; font-weight: bold;">
+                Dirs Footie
+            </div>
             <!-- Cart Icon for all screen sizes (always visible) -->
             <a class="nav-link d-lg-none" href="{% url 'store:cart_view' %}">
                 <i class="fa fa-shopping-cart"></i>
                 {% if user.is_authenticated %}
-                    <span class="badge badge-primary">{{ cart_item_count }}</span>
+                    <span class="badge bg-primary">{{ cart_item_count }}</span>
                 {% endif %}
             </a>
-            <!-- Logo in the center (for mobile) and left (for desktop) -->
-            <a class="navbar-brand mx-lg-0 mx-auto" href="{% url 'store:product_list' %}">
-                <img src="{% static 'store/logo.jpg' %}" alt="Your Logo" style="height: 70px;">
-            </a>
+
             <!-- Menu Button on the right for mobile -->
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <!-- Collapsible content -->
@@ -37,21 +38,28 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'store:product_list' %}">Store</a>
                     </li>
-                    <li class="nav-item">
-                        {% if user.is_authenticated %}
-                        <form id="logout-form" method="POST" action="{% url 'logout' %}" class="d-inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-link nav-link">Logout</button>
-                        </form>
-                        {% endif %}
-                    </li>
+                    {% comment %} {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <form id="logout-form" method="POST" action="{% url 'logout' %}" class="d-inline">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-link nav-link">Logout</button>
+                            </form>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+                        </li>
+                    {% endif %} {% endcomment %}
                 </ul>
             </div>
             <!-- Cart Icon for desktop (always visible) -->
             <a class="nav-link ml-auto d-none d-lg-block" href="{% url 'store:cart_view' %}">
                 <i class="fa fa-shopping-cart"></i>
                 {% if user.is_authenticated %}
-                    <span class="badge badge-primary">{{ cart_item_count }}</span>
+                    <span class="badge bg-primary">{{ cart_item_count }}</span>
                 {% endif %}
             </a>
         </div>
@@ -81,9 +89,7 @@
         </div>
     </footer>
 
-    <!-- Bootstrap JS and dependencies -->
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <!-- Bootstrap 5 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
