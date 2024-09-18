@@ -9,13 +9,34 @@ import urllib.parse
 
 def product_list(request):
     products = Product.objects.all()  # Fetch all products from the database
-    return render(request, 'store/product_list.html', {'products': products})
+    
+    # Pass cart item count if the user is authenticated
+    cart_item_count = 0
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).first()
+        if cart:
+            cart_item_count = CartItem.objects.filter(cart=cart).count()
+    
+    return render(request, 'store/product_list.html', {
+        'products': products,
+        'cart_item_count': cart_item_count,
+    })
 
 
 def product_detail(request, product_id):
     product = get_object_or_404(Product, id=product_id)
-    return render(request, 'store/product_details.html', {'product': product})
-
+    
+    # Pass cart item count if the user is authenticated
+    cart_item_count = 0
+    if request.user.is_authenticated:
+        cart = Cart.objects.filter(user=request.user).first()
+        if cart:
+            cart_item_count = CartItem.objects.filter(cart=cart).count()
+    
+    return render(request, 'store/product_details.html', {
+        'product': product,
+        'cart_item_count': cart_item_count,
+    })
 
 @login_required(login_url='/login/')
 def add_to_cart(request, product_id):
@@ -27,29 +48,17 @@ def add_to_cart(request, product_id):
     cart_item.save()
     return redirect('store:product_list')  # Redirect to the product list or cart page
 
-@login_required
+@login_required(login_url='/login/')
 def cart_view(request):
-    try:
-        # Attempt to get the cart for the logged-in user
-        cart = Cart.objects.get(user=request.user)
-    except Cart.DoesNotExist:
-        # If the cart does not exist, you can create a new one or handle the error as needed
-        cart = Cart.objects.create(user=request.user)
-        # You can also choose to redirect the user to the store page or some other page
-        # return redirect('store:product_list')  # Uncomment to redirect to the product list
-
-    # Get all the cart items associated with the cart
+    cart = Cart.objects.get(user=request.user)
     cart_items = CartItem.objects.filter(cart=cart)
-    # Calculate the total price of all the items in the cart
     total_price = sum(item.get_total_price() for item in cart_items)
-    # Count the total number of items in the cart
-    total_items = cart_items.count()
-
+   
     # Render the cart page with the cart items, total price, and total items
     return render(request, 'store/cart.html', {
         'cart_items': cart_items,
         'total_price': total_price,
-        'total_items': total_items
+        'total_items': total_price
     })
 @login_required
 def update_cart_item(request, item_id):

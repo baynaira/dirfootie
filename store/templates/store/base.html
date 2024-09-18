@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Your Store</title>
-
+    
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -14,13 +14,12 @@
     <link rel="stylesheet" type="text/css" href="{% static 'store/style.css' %}">
 </head>
 <body>
-
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
         <div class="container">
             <div class="navbar-brand text-center w-100" style="font-size: 1.5rem; font-weight: bold;">
                 Dirs Footie
             </div>
-            <!-- Cart Icon for all screen sizes (always visible) -->
+            <!-- Cart Icon for mobile (always visible) -->
             <a class="nav-link d-lg-none" href="{% url 'store:cart_view' %}">
                 <i class="fa fa-shopping-cart"></i>
                 {% if user.is_authenticated %}
@@ -28,17 +27,18 @@
                 {% endif %}
             </a>
 
-            <!-- Menu Button on the right for mobile -->
+            <!-- Menu Button for mobile -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
+
             <!-- Collapsible content -->
             <div class="collapse navbar-collapse justify-content-lg-end justify-content-center" id="navbarNav">
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'store:product_list' %}">Store</a>
                     </li>
-                    {% comment %} {% if user.is_authenticated %}
+                    {% if user.is_authenticated %}
                         <li class="nav-item">
                             <form id="logout-form" method="POST" action="{% url 'logout' %}" class="d-inline">
                                 {% csrf_token %}
@@ -47,16 +47,17 @@
                         </li>
                     {% else %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}">Login</a>
+                            <a class="nav-link" href="{% url 'login' %}?next={{ request.path }}">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'signup' %}">Signup</a>
+                            <a class="nav-link" href="{% url 'signup' %}?next={{ request.path }}">Signup</a>
                         </li>
-                    {% endif %} {% endcomment %}
+                    {% endif %}
                 </ul>
             </div>
+
             <!-- Cart Icon for desktop (always visible) -->
-            <a class="nav-link ml-auto d-none d-lg-block" href="{% url 'store:cart_view' %}">
+            <a class="nav-link d-none d-lg-block" href="{% url 'store:cart_view' %}">
                 <i class="fa fa-shopping-cart"></i>
                 {% if user.is_authenticated %}
                     <span class="badge bg-primary">{{ cart_item_count }}</span>
@@ -71,21 +72,7 @@
     <!-- Footer -->
     <footer class="bg-light py-4">
         <div class="container text-center">
-            <div class="row">
-                <div class="col-12">
-                    <a href="https://www.instagram.com/dirs_footies001/" target="_blank" class="text-dark mx-3">
-                        <i class="fab fa-instagram fa-2x"></i>
-                    </a>
-                    <a href="https://wa.me/+2347017934077" target="_blank" class="text-dark mx-3">
-                        <i class="fab fa-whatsapp fa-2x"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="row mt-3">
-                <div class="col-12">
-                    <p class="text-muted">&copy; 2024 Dirs Store. All rights reserved.</p>
-                </div>
-            </div>
+            <p class="text-muted">&copy; 2024 Dirs Store. All rights reserved.</p>
         </div>
     </footer>
 
